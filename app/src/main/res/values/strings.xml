@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">TaskList</string>
+    <string name="app_name">My TaskList</string>
+    <string name="app_new_name">New Task List</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_display_message">My Message</string>
+    <string name="add_message">Add Message</string>
 </resources>

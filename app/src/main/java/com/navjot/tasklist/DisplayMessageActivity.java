@@ -6,18 +6,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
-    public final static String EXTRA_MESSAGE = "com.navjot.tasklist.Message";
+public class DisplayMessageActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_display_message);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -29,12 +30,24 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        TextView textView = new TextView(this);
+        textView.setTextSize(40);
+        textView.setText(message);
+        textView.setId(R.id.view_1_id);
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.content);
+        layout.addView(textView, 0);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_secondary, menu);
         return true;
     }
 
@@ -50,13 +63,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if(id == R.id.add_message) {
+            return this.addMessage(item);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view) {
-        Intent intent = new Intent (this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        intent.putExtra(MainActivity.EXTRA_MESSAGE, editText.getText().toString());
-        startActivity(intent);
+    private boolean addMessage(MenuItem item) {
+
+        TextView textView = new TextView(this);
+        textView.setTextSize(40);
+        textView.setText("Hello Navjot");
+        LinearLayout layout = (LinearLayout) findViewById(R.id.content);
+        TextView newTextView = (TextView) findViewById(R.id.view_1_id);
+        //layout.addView(newTextView);
+        layout.addView(textView);
+        return true;
     }
+
 }
