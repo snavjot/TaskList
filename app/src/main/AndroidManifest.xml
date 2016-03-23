@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.navjot.tasklist">
 
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher1"
         android:label="@string/app_new_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -27,6 +31,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.navjot.tasklist.MainActivity" />
         </activity>
+
+        <service
+            android:name=".CatogriseInboxMessage"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
