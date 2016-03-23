@@ -2,25 +2,34 @@ package com.navjot.tasklist;
 
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.IBinder;
 
 public class CatogriseInboxMessage extends Service {
+
+    private static String SMS_URI = "content://sms/inbox";
+    private Cursor dataBaseCursor = null;
     public CatogriseInboxMessage() {
         super();
     }
 
-    public void OnCreate() {
-
+    @Override
+    public void onCreate() {
+        Uri smsInboxUri = Uri.parse(CatogriseInboxMessage.SMS_URI);
+        dataBaseCursor = getContentResolver().query(smsInboxUri, null, null, null, null);
     }
 
-    public void OnDestroy() {
+    @Override
+    public void onDestroy() {
 
     }
 
     @Override
-    public void OnStartCommand(Intent intent, int flags, int startId) {
-        handleCommand(intent);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return 1;
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
