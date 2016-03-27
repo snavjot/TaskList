@@ -16,6 +16,7 @@ public class CatogriseInboxMessage extends Service {
 
     @Override
     public void onCreate() {
+
         Uri smsInboxUri = Uri.parse(CatogriseInboxMessage.SMS_URI);
         dataBaseCursor = getContentResolver().query(smsInboxUri, null, null, null, null);
     }
@@ -27,6 +28,7 @@ public class CatogriseInboxMessage extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         return 1;
     }
 
