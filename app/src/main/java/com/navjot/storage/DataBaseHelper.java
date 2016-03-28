@@ -2,13 +2,17 @@ package com.navjot.storage;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.navjot.models.Tag;
+import com.navjot.models.TagAndTagged;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -52,7 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public DataBaseHelper(Context context) {
-        super(context,DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -81,7 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID, tag.getId());
         values.put(KEY_TAG_NAME, tag.getTagName());
-        values.put(KEY_CREATED_ON, getDateTime());
+        values.put(KEY_CREATED_ON, this.getDateTime());
 
         long tagId = db.insert(TABLE_TAG, null, values);
 
@@ -89,7 +93,76 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public Tag getTag(long id) {
-        
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_TAG + " WHERE " + KEY_ID + " = " + id;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+            return null;
+        Tag tag = new Tag();
+        tag.setId(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+        tag.setTagName(cursor.getString(cursor.getColumnIndex(KEY_TAG_NAME)));
+        return tag;
+    }
+
+    /**
+     *  Methods for TagAndTagged
+     */
+    public long createTagAndTagged(long tagId, long taggedId, String taggedResourceUri) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_TAG_ID, tagId);
+        values.put(KEY_TAGGED_ID, taggedId);
+        values.put(KEY_TAGGED_RESOURCE_URI, taggedResourceUri);
+        values.put(KEY_CREATED_ON, this.getDateTime());
+
+        long tagAndTaggedId = db.insert(TABLE_TAG_AND_TAGGED, null, values);
+        return tagAndTaggedId;
+    }
+
+    public TagAndTagged getTagAndTagged(long tagAndTaggedId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_TAG_AND_TAGGED + " WHERE " + KEY_ID +
+                " = " + tagAndTaggedId;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+            return null;
+        TagAndTagged obj = new TagAndTagged();
+        obj.setId(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+        obj.setTagId(cursor.getLong(cursor.getColumnIndex(KEY_TAG_ID)));
+        obj.setTaggedId(cursor.getLong(cursor.getColumnIndex(KEY_TAGGED_ID)));
+        obj.setTaggedResourceUri(cursor.getString(cursor.getColumnIndex(KEY_TAGGED_RESOURCE_URI)));
+
+        return obj;
+    }
+
+    public List<TagAndTagged> getAllTagAndTagged(long tagId) {
+        List<TagAndTagged> list = new ArrayList<TagAndTagged>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + TABLE_TAG_AND_TAGGED + " WHERE " + KEY_TAG_ID +
+                " = " + tagId;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor != null)
+            cursor.moveToFirst();
+        else
+            return null;
+        do {
+            TagAndTagged obj = new TagAndTagged();
+            obj.setId(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
+            obj.setTagId(cursor.getLong(cursor.getColumnIndex(KEY_TAG_ID)));
+            obj.setTaggedId(cursor.getLong(cursor.getColumnIndex(KEY_TAGGED_ID)));
+            obj.setTaggedResourceUri(cursor.getString(cursor
+                    .getColumnIndex(KEY_TAGGED_RESOURCE_URI)));
+            list.add(obj);
+        } while(cursor.moveToNext());
+        return list;
     }
 
     /**
