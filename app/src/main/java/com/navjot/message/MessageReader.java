@@ -19,18 +19,57 @@ public class MessageReader {
         Message message = new Message();
         int index;
         int type;
-        // Get Id
-        index = cursor.getColumnIndex(Message.ID);
-        type = cursor.getType(index);
-        if (type == Cursor.FIELD_TYPE_INTEGER) {
-            message.setId(cursor.getLong(index));
-        }
+        try {
+            // Get Id
+            index = cursor.getColumnIndex(Message.ID);
+            type = cursor.getType(index);
+            if (type == Cursor.FIELD_TYPE_INTEGER) {
+                message.setId(cursor.getLong(index));
+            }
 
-        // Get Address
-        index = cursor.getColumnIndex(Message.ADDREDSS);
-        type = cursor.getType(index);
-        if (type == Cursor.FIELD_TYPE_STRING) {
-            message.setAddress(cursor.getString(index));
+            // Get Address
+            index = cursor.getColumnIndex(Message.ADDREDSS);
+            type = cursor.getType(index);
+            if (type == Cursor.FIELD_TYPE_STRING) {
+                message.setAddress(cursor.getString(index));
+            }
+
+            // Get Date
+            index = cursor.getColumnIndex(Message.DATE);
+            type = cursor.getType(index);
+            if (type == Cursor.FIELD_TYPE_INTEGER) {
+                message.setDate(cursor.getLong(index));
+            }
+
+            // Get Sent Date
+            index = cursor.getColumnIndex(Message.SENTDATE);
+            type = cursor.getType(index);
+            if (type == Cursor.FIELD_TYPE_INTEGER) {
+                message.setSentDate(cursor.getLong(index));
+            }
+
+            // Get Person Id
+            index = cursor.getColumnIndex(Message.PERSONID);
+            if (index != -1) {
+                type = cursor.getType(index);
+                if (type == Cursor.FIELD_TYPE_INTEGER) {
+                    message.setPersonId(cursor.getLong(index));
+                } else {
+                    message.setPersonId(-1);
+                }
+            } else {
+                message.setPersonId(-1);
+            }
+
+            // Get Body
+            index = cursor.getColumnIndex(Message.BODY);
+            type = cursor.getType(index);
+            if (type == Cursor.FIELD_TYPE_STRING) {
+                message.setBody(cursor.getString(index));
+            }
+        }
+        catch (Exception ex) {
+
         }
         return message;
     }
