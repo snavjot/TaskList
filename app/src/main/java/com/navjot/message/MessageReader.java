@@ -67,10 +67,22 @@ public class MessageReader {
             if (type == Cursor.FIELD_TYPE_STRING) {
                 message.setBody(cursor.getString(index));
             }
+
+            // Move the cursor to next object
+            cursor.moveToNext();
         }
         catch (Exception ex) {
 
         }
         return message;
+    }
+
+    public boolean hasNext() {
+        if (cursor.isAfterLast()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

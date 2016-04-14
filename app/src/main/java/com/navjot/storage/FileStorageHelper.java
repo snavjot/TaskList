@@ -21,8 +21,6 @@ public class FileStorageHelper {
         }
     }
 
-    
-
     public void closeStream() {
         try {
             outputStream.close();
